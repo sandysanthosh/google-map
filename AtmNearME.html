@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Places Searchbox</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+       </style>
+
+    
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+  </head>
+    <style>
+    html,
+body,
+#map-canvas {
+  height: 100%;
+  margin: 0px;
+  padding: 0px
+}
+</style>
+   
+<script type="text/javascript">
+    var map;
+var infowindow;
+
+function initialize() {
+  var pyrmont = new google.maps.LatLng(12.84477, 80.226411);
+
+  map = new google.maps.Map(document.getElementById('map-canvas'), {
+    center: pyrmont,
+    zoom: 15
+  });
+
+  var request = {
+    location: pyrmont,
+    radius: 5500,
+    types: ['atm']
+  };
+  infowindow = new google.maps.InfoWindow();
+  var service = new google.maps.places.PlacesService(map);
+  service.nearbySearch(request, callback);
+}
+
+function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      createMarker(results[i]);
+    }
+  }
+}
+
+function createMarker(place) {
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: place.geometry.location
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(place.name);
+    infowindow.open(map, this);
+  });
+}
+
+
+    </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnahpwY4LRTYlzEHnER3B_Y8NR1HzmrVE&libraries=places&callback=initialize"
+         async defer></script>
+  <body>
+  <div id="map-canvas" style="width: 100%; float:left"></div>
+
+  </body>
+</html>
